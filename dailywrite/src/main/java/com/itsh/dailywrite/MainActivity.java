@@ -5,10 +5,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends Activity {
+	final int MODIFY = 0;
+	final int DELETE = 1;
 
 	private ListView listView;
 	private Button btn_add;
@@ -41,6 +51,47 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("请选择操作");
+				menu.add(0,MODIFY,0,"修改");
+				menu.add(0,DELETE,0,"删除");
+			}
+		});
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				String title = ((TextView)view.findViewById(R.id.title)).getText().toString();
+				Intent intent = new Intent(MainActivity.this,ShowContent.class);
+				intent.putExtra("title",title);
+				startActivity(intent);
+			}
+		});
+
+	}
+
+	public boolean onContextItemSelected(MenuItem item){
+		String title;
+		AdapterView.AdapterContextMenuInfo menuInfo;
+		switch (item.getItemId()){
+			case MODIFY:
+				menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+				title = ((TextView)menuInfo.targetView.findViewById(R.id.title)).getText().toString();
+				Intent intent = new Intent(MainActivity.this,ShowContent.class);
+				intent.putExtra("title",title);
+				startActivity(intent);
+				return true;
+			case DELETE:
+				menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+				title = ((TextView)menuInfo.targetView.findViewById(R.id.title)).getText().toString();
+				String SQL = "delete from note where title='"+title+"'";
+				SQLiteDatabase sdb = dbConnect.getReadableDatabase();
+				sdb.execSQL(SQL);
+				reFresh();
+				sdb.close();
+				Toast.makeText(getApplicationContext(),"删除成功！",Toast.LENGTH_SHORT).show();
+				return true;
+		}
+		return false;
 	}
 
 	//显示首页列表
@@ -53,14 +104,17 @@ public class MainActivity extends Activity {
 			String title = cursor.getString(cursor.getColumnIndex("title"));
 			long time = cursor.getLong(cursor.getColumnIndex("time"));
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String content = cursor.getString(cursor.getColumnIndex("content"));
 			map.put("title",title);
 			map.put("time",dateFormat.format(time));
 			list.add(map);
 		}
-		cursor.close();
+		sdb.close();
 
 		adapter = new SimpleAdapter(MainActivity.this,list,R.layout.items,new String[] {"title","time"},new int[] {R.id.title,R.id.content});
 		listView.setAdapter(adapter);
+	}
+
+	public void reFresh(){
+		onCreate(null);
 	}
 }

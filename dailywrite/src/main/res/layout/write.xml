@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="请输入标题"
+        android:textSize="25sp"
         android:inputType="textPersonName" />
 
     <EditText
@@ -20,7 +21,10 @@
         android:ems="10"
         android:hint="在此处输入内容"
         android:inputType="textMultiLine"
-        android:minLines="15" />
+        android:gravity="top|left"
+        android:textSize="22sp"
+        android:minLines="8"
+        android:maxLines="13" />
 
     <RelativeLayout
         android:layout_width="match_parent"
