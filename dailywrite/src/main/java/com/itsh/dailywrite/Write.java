@@ -39,7 +39,7 @@ public class Write extends Activity {
 			public void onClick(View view) {
 				String title = et_title.getText().toString();
 				String content = et_content.getText().toString();
-				long time = System.currentTimeMillis();
+				long time = (System.currentTimeMillis())/1000L;
 
 					ContentValues cv = new ContentValues();
 					cv.put("title", title);
@@ -47,11 +47,12 @@ public class Write extends Activity {
 					cv.put("content", content);
 					DBConnect dbConnect = new DBConnect(Write.this,"DailyWrite.db",null,1);
 					SQLiteDatabase sd = dbConnect.getReadableDatabase();
-					sd.insert("note", null, cv);
+					String SQL = "insert OR IGNORE into note(title,time,content) values(?,?,?)";
+					sd.execSQL(SQL,new Object[] {title,time,content});
 					Toast.makeText(getApplicationContext(),"保存成功！",Toast.LENGTH_SHORT).show();
 					sd.close();
-					Intent intent = new Intent(Write.this,MainActivity.class);
-					startActivity(intent);
+//					Intent intent = new Intent(Write.this,MainActivity.class);
+//					startActivity(intent);
 					Write.this.finish();
 				}
 
@@ -59,4 +60,5 @@ public class Write extends Activity {
 
 
 	}
+
 }

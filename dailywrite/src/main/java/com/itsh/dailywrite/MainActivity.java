@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,11 +15,13 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +60,20 @@ public class MainActivity extends Activity {
 			}
 		});
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
 				String title = ((TextView)view.findViewById(R.id.title)).getText().toString();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String gettime = ((TextView)view.findViewById(R.id.time)).getText().toString();
+				long time  = 0;
+				try {
+					time = sdf.parse(gettime).getTime()/1000;
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
 				Intent intent = new Intent(MainActivity.this,ShowContent.class);
 				intent.putExtra("title",title);
+				intent.putExtra("time",time);
 				startActivity(intent);
 			}
 		});
@@ -102,19 +113,26 @@ public class MainActivity extends Activity {
 		while (cursor.moveToNext()){
 			Map<String,Object> map = new HashMap<>();
 			String title = cursor.getString(cursor.getColumnIndex("title"));
-			long time = cursor.getLong(cursor.getColumnIndex("time"));
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			long time = cursor.getLong(cursor.getColumnIndex("time"))*1000;
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			map.put("title",title);
 			map.put("time",dateFormat.format(time));
 			list.add(map);
 		}
 		sdb.close();
 
-		adapter = new SimpleAdapter(MainActivity.this,list,R.layout.items,new String[] {"title","time"},new int[] {R.id.title,R.id.content});
+		adapter = new SimpleAdapter(MainActivity.this,list,R.layout.items,new String[] {"title","time"},new int[] {R.id.title,R.id.time});
 		listView.setAdapter(adapter);
 	}
 
+	//刷新页面内容
 	public void reFresh(){
 		onCreate(null);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		reFresh();
 	}
 }

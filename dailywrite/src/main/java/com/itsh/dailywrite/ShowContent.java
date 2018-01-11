@@ -9,6 +9,7 @@ import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class ShowContent extends Activity {
@@ -26,7 +27,10 @@ public class ShowContent extends Activity {
 
 		Intent intent = getIntent();
 		String title = intent.getStringExtra("title");
-		String SQL = "select * from note where title='"+title+"'";
+		long gettime = intent.getLongExtra("time",0);
+		String time = String.valueOf(gettime);
+
+		String SQL = " select * from note where title='"+title+"' and time='"+time+"'";
 		dbConnect = new DBConnect(ShowContent.this,"DailyWrite.db",null,1);
 		SQLiteDatabase db = dbConnect.getReadableDatabase();
 		Cursor cursor = db.rawQuery(SQL,null);
@@ -40,8 +44,8 @@ public class ShowContent extends Activity {
 
 		btn_back.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				Intent intent1 = new Intent(ShowContent.this,MainActivity.class);
-				startActivity(intent1);
+//				Intent intent1 = new Intent(ShowContent.this,MainActivity.class);
+//				startActivity(intent1);
 				ShowContent.this.finish();
 			}
 		});
