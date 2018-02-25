@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DailyWrite</string>
+    <string name="title_activity_modify_content">ModifyContent</string>
 </resources>

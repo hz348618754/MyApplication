@@ -40,7 +40,7 @@ public class ShowContent extends Activity {
 			et_title.setText(show_title);
 			et_content.setText(show_content);
 		}
-		db.close();
+		cursor.close();
 
 		btn_back.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {

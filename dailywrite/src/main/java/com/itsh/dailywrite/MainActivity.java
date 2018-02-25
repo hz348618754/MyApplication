@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
 			case MODIFY:
 				menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 				title = ((TextView)menuInfo.targetView.findViewById(R.id.title)).getText().toString();
-				Intent intent = new Intent(MainActivity.this,ShowContent.class);
+				Intent intent = new Intent(MainActivity.this,ModifyContent.class);
 				intent.putExtra("title",title);
 				startActivity(intent);
 				return true;

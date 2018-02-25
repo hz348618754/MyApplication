@@ -15,8 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Write"></activity>
-        <activity android:name=".ShowContent"></activity>
+        <activity android:name=".Write" />
+        <activity android:name=".ShowContent" />
+        <activity
+            android:name=".ModifyContent"
+            android:label="@string/title_activity_modify_content"></activity>
     </application>
 
 </manifest>

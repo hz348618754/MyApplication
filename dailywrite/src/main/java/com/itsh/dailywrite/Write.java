@@ -41,19 +41,19 @@ public class Write extends Activity {
 				String content = et_content.getText().toString();
 				long time = (System.currentTimeMillis())/1000L;
 
-					ContentValues cv = new ContentValues();
-					cv.put("title", title);
-					cv.put("time", time);
-					cv.put("content", content);
-					DBConnect dbConnect = new DBConnect(Write.this,"DailyWrite.db",null,1);
-					SQLiteDatabase sd = dbConnect.getReadableDatabase();
-					String SQL = "insert OR IGNORE into note(title,time,content) values(?,?,?)";
-					sd.execSQL(SQL,new Object[] {title,time,content});
-					Toast.makeText(getApplicationContext(),"保存成功！",Toast.LENGTH_SHORT).show();
-					sd.close();
+				/*ContentValues cv = new ContentValues();
+				cv.put("title", title);
+				cv.put("time", time);
+				cv.put("content", content);*/
+				DBConnect dbConnect = new DBConnect(Write.this, "DailyWrite.db", null, 1);
+				SQLiteDatabase sd = dbConnect.getReadableDatabase();
+				String SQL = "insert OR IGNORE into note(title,time,content) values(?,?,?)";
+				sd.execSQL(SQL, new Object[]{title, time, content});
+				Toast.makeText(getApplicationContext(), "保存成功！", Toast.LENGTH_SHORT).show();
+				sd.close();
 //					Intent intent = new Intent(Write.this,MainActivity.class);
 //					startActivity(intent);
-					Write.this.finish();
+				Write.this.finish();
 				}
 
 		});

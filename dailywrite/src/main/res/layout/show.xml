@@ -12,6 +12,7 @@ android:orientation="vertical">
     android:textSize="25sp"
     android:inputType="none"
     android:focusable="false"
+    android:gravity="center_horizontal"
     />
 
     <com.itsh.dailywrite.LineEditText
@@ -24,7 +25,8 @@ android:orientation="vertical">
         android:textSize="22sp"
         android:focusable="false"
         android:minLines="8"
-        android:maxLines="13" />
+        android:maxLines="13"
+        android:background="@null"/>
     <!--<EditText-->
         <!--android:id="@+id/et_content"-->
         <!--android:layout_width="match_parent"-->

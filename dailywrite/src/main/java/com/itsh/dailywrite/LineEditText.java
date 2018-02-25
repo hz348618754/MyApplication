@@ -12,24 +12,31 @@ import android.widget.EditText;
  */
 
 public class LineEditText extends EditText {
-	private Paint paint;
+    private Paint paint;
 
-	public LineEditText(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		paint = new Paint();
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setColor(Color.WHITE);
-	}
+    public LineEditText(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
+    }
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
-		int lineCount = getLineCount();
-		int lineHeight = getLineHeight();
-		for (int i=0;i<lineCount;i++){
-			int lineY = (i+1)*lineHeight+getPaddingTop();
-			canvas.drawLine(0,lineY,this.getWidth(),lineY,paint);
-		}
-	}
+        int lineCount = getLineCount();
+        int lineHeight = getLineHeight();
+        if (lineCount < 8) {
+            for (int i = 0; i < 8; i++) {
+                int lineY = (i + 1) * lineHeight + getPaddingTop();
+                canvas.drawLine(0, lineY, this.getWidth(), lineY, paint);
+            }
+        } else {
+            for (int i = 0; i < lineCount; i++) {
+                int lineY = (i + 1) * lineHeight + getPaddingTop();
+                canvas.drawLine(0, lineY, this.getWidth(), lineY, paint);
+            }
+        }
+    }
 }
